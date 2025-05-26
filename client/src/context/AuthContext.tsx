@@ -1,6 +1,11 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+// Configure base URL for API calls
+const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:5000'
+  : 'https://your-backend-url.com'; // Replace with your deployed backend URL
+
 interface User {
   _id: string;
   email: string;
@@ -30,10 +35,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const storedToken = localStorage.getItem('token');
       if (storedToken) {
         try {
-          // Set up axios default header
           axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
-          // Get user profile
-          const response = await axios.get('http://localhost:5000/api/auth/profile');
+          const response = await axios.get(`${API_BASE_URL}/api/auth/profile`);
           setUser(response.data);
         } catch (error) {
           localStorage.removeItem('token');
@@ -48,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
         email,
         password,
       });
@@ -64,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (userData: any) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', userData);
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register`, userData);
       const { user, token } = response.data;
       setUser(user);
       setToken(token);
