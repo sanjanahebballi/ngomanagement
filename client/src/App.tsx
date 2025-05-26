@@ -13,7 +13,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/ngomanagement">
           <Layout>
             <Routes>
               <Route path="/login" element={<Login />} />
